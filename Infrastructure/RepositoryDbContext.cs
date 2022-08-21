@@ -4,10 +4,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure;
 
-public class DbContext : Microsoft.EntityFrameworkCore.DbContext
+public class RepositoryDbContext : Microsoft.EntityFrameworkCore.DbContext
 {
 
-    public DbContext(DbContextOptions<DbContext> options, ServiceLifetime serviceLifetime) : base(options)
+    public RepositoryDbContext(DbContextOptions<RepositoryDbContext> options, ServiceLifetime serviceLifetime) : base(options)
     {
     }
 

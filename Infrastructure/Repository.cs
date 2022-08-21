@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices.ComTypes;
+﻿using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices.ComTypes;
 using Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,23 +8,36 @@ namespace Infrastructure;
 
 public class Repository :  IRepository
 {
-    
-    private DbContextOptions<DbContext> _opts;
+
+    private Movie mockMovieObject;
+    private Review mockReviewObject;
+    private DbContextOptions<RepositoryDbContext> _opts;
 
     public Repository()
     {
-        _opts = new DbContextOptionsBuilder<DbContext>()
+        mockMovieObject =new Movie()
+        {
+            Id = 1, Summary = "Bob writes a program ...", Title = "Bob's Movie", ReleaseYear = 2022,
+            BoxOfficeSumInMillions = 42
+        };
+        mockReviewObject = new Review()
+        {
+            Id = 1, Headline = "Super great movie", Rating = 5,
+            ReviewerName = "Smølf", MovieId = 1, Movie = mockMovieObject
+        };
+
+        _opts = new DbContextOptionsBuilder<RepositoryDbContext>()
             .UseSqlite("Data source=../Infrastructure/db.db").Options;
     }
 
-    public IEnumerable<Review> GetReviews()
+    public List<Review> GetReviews()
     {
-        return new List<Review>() { };
+        return new List<Review>() { mockReviewObject };
     }
 
-    public IEnumerable<Movie> GetMovies()
+    public List<Movie> GetMovies()
     {
-        return new List<Movie>() { };
+        return new List<Movie>() { mockMovieObject };
     }
 
     public Movie DeleteMovie(int movieId)
@@ -38,11 +52,12 @@ public class Repository :  IRepository
 
     public Movie AddMovie(Movie movie)
     {
-        return new Movie();
+        return movie;
     }
 
     public Review AddReview(Review review)
     {
-        return new Review();
+        review.Movie = new Movie();
+        return review;
     }
 }

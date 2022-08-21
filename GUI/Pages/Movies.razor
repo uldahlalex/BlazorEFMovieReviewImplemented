@@ -3,6 +3,8 @@
 <PageTitle>Movies</PageTitle>
 
 @using Entities
+@using Microsoft.AspNetCore.Mvc
+@using System.Text.Json
 @inject IRepository _repository
 
 
@@ -18,7 +20,7 @@
         </tr>
         </thead>
         <tbody>
-        @if (_movies == null || new List<Movie>(_movies).Count == 0)
+        @if (_movies == null || _movies.Count==0)
                 {
                     <tr>
         
@@ -54,9 +56,9 @@
                             </tr>
         <tr>
             <td><input placeholder="Movie title" @bind="MovieTitle"/></td>
-            <td><input placeholder="Short summary"/></td>
-            <td><input placeholder="Release year" type="number"/></td>
-            <td><input placeholder="Earnings" type="number"/></td>
+            <td><input placeholder="Short summary" @bind="MovieSummary"/></td>
+            <td><input placeholder="Release year" type="number" @bind="ReleaseYear"/></td>
+            <td><input placeholder="Earnings" type="number" @bind="BoxOfficeEarnings"/></td>
             <td><button onclick="@(() => AddMovie())">Add</button></td>
         </tr>
         </tbody>
@@ -64,9 +66,12 @@
 
 
 @code {
-    private IEnumerable<Movie> _movies;
+    private List<Movie> _movies;
     
     private string MovieTitle { get; set; }
+    private string MovieSummary { get; set; }
+    private int ReleaseYear { get; set; }
+    private int BoxOfficeEarnings { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -75,13 +80,28 @@
 
     private async Task RemoveMovie(Movie movie)
     {
-        var deletedMovie = _repository.DeleteMovie(movie.Id);
-        _movies = _movies.Where(m => !m.Equals(deletedMovie));
+        Movie deletedMovie = _repository.DeleteMovie(movie.Id);
+        Console.WriteLine("To remove: "+JsonSerializer.Serialize(deletedMovie));
+        var removeItem = _movies.Single(m => m.Id == deletedMovie.Id);
+        Console.WriteLine("Remoed from list: "+JsonSerializer.Serialize(removeItem));
+        _movies.Remove(removeItem);
+       
     }
 
     private async Task AddMovie()
     {
-        Console.WriteLine(MovieTitle);
+        if(!String.IsNullOrWhiteSpace(MovieTitle)  && 
+           !String.IsNullOrWhiteSpace(MovieSummary))
+        {
+            Movie movie = new Movie()
+            {
+                Title = MovieTitle,
+                Summary = MovieSummary,
+                ReleaseYear = ReleaseYear,
+                BoxOfficeSumInMillions = BoxOfficeEarnings
+            };
+            _movies.Add(_repository.AddMovie(movie));
+        }
         
     }
 

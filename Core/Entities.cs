@@ -4,7 +4,6 @@ public class Review
 {
     public int Id { get; set; }
     public string Headline { get; set; }
-    public string Content { get; set; }
     public int Rating { get; set; }
     public string ReviewerName { get; set; }
     public Movie Movie { get; set; }
@@ -18,5 +17,5 @@ public class Movie
     public string Summary { get; set; }
     public int ReleaseYear { get; set; }
     public int BoxOfficeSumInMillions { get; set; }
-    public ICollection<Review> Reviews { get; set; }
+    public ICollection<Review>? Reviews { get; set; }
 }

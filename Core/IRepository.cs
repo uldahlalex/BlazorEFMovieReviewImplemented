@@ -2,9 +2,9 @@
 
 public interface IRepository
 {
-    IEnumerable<Review> GetReviews();
+    List<Review> GetReviews();
 
-    IEnumerable<Movie> GetMovies();
+    List<Movie> GetMovies();
     Movie DeleteMovie(int movieId);
     Review DeleteReview(int reviewId); 
     Movie AddMovie(Movie movie);
