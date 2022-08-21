@@ -1,0 +1,94 @@
+﻿@page "/"
+
+<PageTitle>Reviews</PageTitle>
+
+
+
+@using Entities
+@inject IRepository _repository
+
+
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Reviewer</th>
+            <th>Rating</th>
+            <th>Headline</th>
+            <th>Movie</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (_reviews == null || new List<Review>(_reviews).Count == 0)
+        {
+            <tr>
+
+                <td colspan="5" style="text-align: center; vertical-align: middle;"><h4>There are no reviews to display</h4></td>
+        
+         
+            </tr>
+                
+            
+          
+        }
+        else
+        {
+            @foreach (var review in _reviews)
+                    {
+                        <tr>
+                            <td>@review.ReviewerName</td>
+                            <td>@review.Rating</td>
+                            <td>@review.Headline</td>
+                            <td>@review.Movie.Title</td>
+                            <th></th>
+                        </tr>
+                    }
+        }
+        
+        </tbody>
+        <tr>
+        
+                        <td colspan="5" style="text-align: center; vertical-align: middle;"><h4>Add a new review:</h4></td>
+                
+                 
+                    </tr>
+        <tbody>
+        <tr>
+            <td><input placeholder="Name of reviewer"/></td>
+            <td><input type="number" placeholder="1-5"/></td>
+            <td><input placeholder="Captivating headline"/></td>
+            <td>
+                @if (_movies == null || new List<Movie>(_movies).Count == 0)
+                                {
+                                    <p>Add a movie first</p>
+                                }
+                else
+                {
+                    <select>
+                    
+                                        @foreach (var movie in _movies)
+                                        {
+                                            <option>@movie.Title</option>
+                                        }
+                                    </select>
+                }
+                
+            </td>
+            <td><button>Add</button></td>
+        </tr>
+        </tbody>
+    </table>
+
+
+@code {
+    private IEnumerable<Review> _reviews;
+    private IEnumerable<Movie> _movies;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _reviews = _repository.GetReviews();
+        _movies = _repository.GetMovies();
+    }
+
+}
