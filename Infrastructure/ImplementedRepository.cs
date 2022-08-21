@@ -75,6 +75,8 @@ public class ImplementedRepository : IRepository
     {
         using (var context = new RepositoryDbContext(_opts, ServiceLifetime.Scoped))
         {
+            var movie = context.MovieTable.Find(review.MovieId);
+            review.Movie = movie;
             context.ReviewTable.Add(review);
             context.SaveChanges();
             return review;
