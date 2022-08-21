@@ -27,7 +27,7 @@ public class ImplementedRepository : IRepository
     {
         using (var context = new RepositoryDbContext(_opts, ServiceLifetime.Scoped))
         {
-            return context.ReviewTable.ToList();
+            return context.ReviewTable.Include(r => r.Movie).ToList();
         }
     }
 

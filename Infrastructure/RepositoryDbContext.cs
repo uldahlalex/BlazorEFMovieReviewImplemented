@@ -26,8 +26,8 @@ public class RepositoryDbContext : Microsoft.EntityFrameworkCore.DbContext
             .HasForeignKey(r => r.MovieId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<Review>()
-            .Ignore(r => r.Movie);
+        modelBuilder.Entity<Movie>()
+            .Ignore(m => m.Reviews);
 
     }
 
