@@ -1,8 +1,6 @@
-﻿using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.ComTypes;
-using Entities;
+﻿using Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+
 
 namespace Infrastructure;
 
@@ -27,7 +25,7 @@ public class Repository :  IRepository
         };
 
         _opts = new DbContextOptionsBuilder<RepositoryDbContext>()
-            .UseSqlite("Data source=../Infrastructure/db.db").Options;
+            .UseSqlite("Data source=..//GUI/db.db").Options;
     }
 
     public List<Review> GetReviews()
