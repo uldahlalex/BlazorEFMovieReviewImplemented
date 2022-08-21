@@ -81,11 +81,9 @@
     private async Task RemoveMovie(Movie movie)
     {
         Movie deletedMovie = _repository.DeleteMovie(movie.Id);
-        Console.WriteLine("To remove: "+JsonSerializer.Serialize(deletedMovie));
-        var removeItem = _movies.Single(m => m.Id == deletedMovie.Id);
-        Console.WriteLine("Remoed from list: "+JsonSerializer.Serialize(removeItem));
-        _movies.Remove(removeItem);
-       
+        _movies = _movies.Where(m => m.Id != deletedMovie.Id).ToList();
+        StateHasChanged();
+
     }
 
     private async Task AddMovie()

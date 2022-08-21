@@ -5,6 +5,7 @@
 
 
 @using Entities
+@using System.Text.Json
 @inject IRepository _repository
 
 
@@ -41,7 +42,7 @@
                             <td>@review.Rating</td>
                             <td>@review.Headline</td>
                             <td>@review.Movie.Title</td>
-                            <th><button onclick="@(() => RemoveReview(review.Id))"></button></th>
+                            <th><button onclick="@(() => RemoveReview(review.Id))">Delete</button></th>
                         </tr>
                     }
         }
@@ -101,7 +102,7 @@
         if (!String.IsNullOrWhiteSpace(ReviwerName) &&
             !String.IsNullOrWhiteSpace(Headline))
         {
-            Review review = new Review()
+             Review review = new Review()
             {
                 ReviewerName = ReviwerName,
                 Rating = Rating,
@@ -116,7 +117,8 @@
     private async Task RemoveReview(int reviewId)
     {
         var deletedReview = _repository.DeleteReview(reviewId);
-        _reviews = _reviews.Where(r => !r.Equals(deletedReview)).ToList();
+        _reviews = _reviews.Where(r => r.Id!=deletedReview.Id).ToList();
+        StateHasChanged();
     }
 
 }
