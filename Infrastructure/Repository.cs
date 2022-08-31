@@ -1,5 +1,7 @@
-﻿using Entities;
+﻿using System.Threading.Channels;
+using Entities;
 using Microsoft.EntityFrameworkCore;
+using ValidationResult = FluentValidation.Results.ValidationResult;
 
 
 namespace Infrastructure;
@@ -15,14 +17,22 @@ public class Repository :  IRepository
     {
         mockMovieObject =new Movie()
         {
-            Id = 1, Summary = "Bob writes a program ...", Title = "Bob's Movie", ReleaseYear = 2022,
-            BoxOfficeSumInMillions = 42
+            Id = 1, Summary = "Bob writes a program ...", Title = "a", ReleaseYear = 2022,
+            BoxOfficeSumInMillions = 42, Reviews = new List<Review>() {new Review()}
         };
         mockReviewObject = new Review()
         {
             Id = 1, Headline = "Super great movie", Rating = 5,
             ReviewerName = "Smølf", MovieId = 1, Movie = mockMovieObject
         };
+
+        var result = new MovieValidator()
+            .Validate(mockMovieObject)
+            .Errors.ToList();
+        result.ForEach(e =>
+        {
+            Console.WriteLine(e.ErrorMessage);
+        });
 
         _opts = new DbContextOptionsBuilder<RepositoryDbContext>()
             .UseSqlite("Data source=..//GUI/db.db").Options;

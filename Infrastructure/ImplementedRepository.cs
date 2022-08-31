@@ -72,7 +72,9 @@ public class ImplementedRepository : IRepository
     {
         using (var context = new ImplementedDbContext(_opts, ServiceLifetime.Scoped))
         {
-            review.Movie = context.MovieTable.Find(review.MovieId) ?? throw new InvalidOperationException();
+            review.Movie = context
+                .MovieTable
+                .Find(review.MovieId) ?? throw new InvalidOperationException();
             context.ReviewTable.Add(review);
             context.SaveChanges();
             return review;

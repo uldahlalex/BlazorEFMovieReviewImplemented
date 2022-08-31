@@ -13,6 +13,7 @@ public class ImplementedDbContext : Microsoft.EntityFrameworkCore.DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
         modelBuilder.Entity<Movie>()
             .Property(m => m.Id)
             .ValueGeneratedOnAdd();
@@ -25,9 +26,17 @@ public class ImplementedDbContext : Microsoft.EntityFrameworkCore.DbContext
             .WithOne(r => r.Movie)
             .HasForeignKey(r => r.MovieId)
             .OnDelete(DeleteBehavior.Cascade);
+        
 
         modelBuilder.Entity<Movie>()
             .Ignore(m => m.Reviews);
+
+        modelBuilder.Entity<Movie>()
+            .HasData(new Movie()
+            {
+                Id = 1, Summary = "seeded", Title = "seeded", ReleaseYear = 2022,
+                BoxOfficeSumInMillions = 42
+            });
 
     }
 
